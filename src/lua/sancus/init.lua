@@ -4,5 +4,6 @@
 --
 
 core = require(... .. ".core")
+utils = require(... .. ".utils")
 
 module(...)
