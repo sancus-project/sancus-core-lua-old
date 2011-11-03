@@ -23,5 +23,7 @@ PKG_CHECK_MODULES(LUA, [lua5.1])
 
 AC_CONFIG_FILES([Makefile
 		 doc/Makefile
+		 src/cmod/Makefile
+		 src/lua/Makefile
 		 src/Makefile])
 AC_OUTPUT
