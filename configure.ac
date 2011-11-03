@@ -5,6 +5,7 @@ AM_INIT_AUTOMAKE([foreign dist-bzip2 -Wall -Werror])
 
 AC_CONFIG_MACRO_DIR([m4])
 
+AC_DISABLE_STATIC
 LT_INIT
 
 #
@@ -17,7 +18,8 @@ AC_PROG_CC_C99
 # Check for libraries
 #
 
-PKG_CHECK_MODULES(sancus_core, [sancus-core])
+PKG_CHECK_MODULES(SANCUS_CORE, [sancus-core])
+PKG_CHECK_MODULES(LUA, [lua5.1])
 
 AC_CONFIG_FILES([Makefile
 		 doc/Makefile
