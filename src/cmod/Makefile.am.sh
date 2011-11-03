@@ -10,10 +10,10 @@ cat <<EOT | tee Makefile.am
 AM_LDFLAGS = \$(LUA_LIBS) -module -avoid-version
 AM_CFLAGS = \$(LUA_CFLAGS)
 
-lib_LTLIBRARIES = core.la
+nobase_cmod_LTLIBRARIES = sancus/core.la
 
-core_la_SOURCES = \\
+sancus_core_la_SOURCES = \\
 	$(list *.c)
 
-libdir = @libdir@/lua/5.1/sancus
+cmoddir = @libdir@/lua/5.1
 EOT
