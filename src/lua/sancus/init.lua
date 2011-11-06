@@ -5,5 +5,6 @@
 
 core = require(... .. ".core")
 utils = require(... .. ".utils")
+tcp = require(... .. ".tcp")
 
 module(...)
