@@ -8,3 +8,6 @@ utils = require(... .. ".utils")
 tcp = require(... .. ".tcp")
 
 module(...)
+
+function run()
+end
