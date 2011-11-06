@@ -4,7 +4,8 @@
 --
 
 local next, pairs = next, pairs
-local print, string, tostring, type = print, string, tostring, type
+local debug, string = debug, string
+local print, tostring, type = print, tostring, type
 
 module (...)
 
