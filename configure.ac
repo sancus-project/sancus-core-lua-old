@@ -18,7 +18,7 @@ AC_PROG_CC_C99
 # Check for libraries
 #
 
-PKG_CHECK_MODULES(SANCUS_CORE, [sancus-core])
+PKG_CHECK_MODULES(SANCUS, [sancus-core])
 PKG_CHECK_MODULES(LUA, [lua5.1])
 
 AC_CONFIG_FILES([Makefile
