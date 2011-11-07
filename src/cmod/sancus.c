@@ -31,9 +31,22 @@
 #include "lua.h"
 #include "lauxlib.h"
 
+#include <sancus.h>
+
+/*
+ */
+static int loop_run(lua_State *L)
+{
+	(void) L;
+
+	sancus_loop_run(NULL);
+	return 0;
+}
+
 /*
  */
 static const struct luaL_Reg core[] = {
+	{"run", loop_run},
 	{NULL, NULL} /* sentinel */
 };
 

@@ -9,5 +9,4 @@ tcp = require(... .. ".tcp")
 
 module(...)
 
-function run()
-end
+run = core.run
