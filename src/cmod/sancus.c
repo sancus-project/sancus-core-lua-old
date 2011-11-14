@@ -39,7 +39,7 @@ static int loop_run(lua_State *L)
 {
 	(void) L;
 
-	sancus_loop_run(NULL);
+	sancus_run(NULL);
 	return 0;
 }
 
