@@ -27,11 +27,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <assert.h>
+
 #define LUA_LIB
 #include "lua.h"
 #include "lauxlib.h"
 
 #include <sancus.h>
+
+static SancusState S;
 
 /*
  */
@@ -39,7 +43,7 @@ static int loop_run(lua_State *L)
 {
 	(void) L;
 
-	sancus_run(NULL);
+	sancus_state_run(S);
 	return 0;
 }
 
@@ -52,6 +56,9 @@ static const struct luaL_Reg core[] = {
 
 int luaopen_sancus_core(lua_State *L)
 {
+	assert(S == NULL);
+	S = sancus_init();
+
 	luaL_register(L, "sancus.core", core);
 	return 1;
 }
