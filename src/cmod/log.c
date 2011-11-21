@@ -36,7 +36,20 @@
 
 /*
  */
+static int l_write(lua_State *L)
+{
+	int level = luaL_checkint(L, 1);
+	const char *name = luaL_checkstring(L, 2);
+	const char *msg = luaL_checkstring(L, 3);
+
+	sancus_log_write(level, name, msg);
+	return 0;
+}
+
+/*
+ */
 static const struct luaL_Reg core[] = {
+	{"write", l_write},
 	{NULL, NULL} /* sentinel */
 };
 
