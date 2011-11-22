@@ -6,7 +6,7 @@
 core = require(... .. ".core")
 
 local setmetatable = setmetatable
-local assert, type = assert, type
+local assert, select, type = assert, select, type
 
 module(...)
 
@@ -14,7 +14,10 @@ local _mt = {
 	__index = {},
 }
 
-function _mt.__index:log(str)
+function _mt.__index:log(str, ...)
+	if select('#', ...) > 0 then
+		str = str:format(...)
+	end
 	core.write(9, self.name, str)
 end
 
