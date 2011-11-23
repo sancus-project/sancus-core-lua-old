@@ -34,6 +34,7 @@
 #include "lauxlib.h"
 
 #define LUA_MOD_NAME	"sancus.tcp.core"
+#define MT_SERVER	"sancus.tcp.server"
 
 #include <ev.h>
 
@@ -49,6 +50,9 @@ static int l_create_server(lua_State *L)
 	server = lua_newuserdata(L, sizeof(*server));
 	sancus_tcp_server_init(server);
 
+	luaL_getmetatable(L, MT_SERVER);
+	lua_setmetatable(L, -2);
+
 	return 1;
 }
 
@@ -59,8 +63,17 @@ static const struct luaL_Reg core[] = {
 	{NULL, NULL} /* sentinel */
 };
 
+static const struct luaL_Reg server_m[] = {
+	{NULL, NULL} /* sentinel */
+};
+
 int luaopen_sancus_tcp_core(lua_State *L)
 {
+	luaL_newmetatable(L, MT_SERVER);
+	lua_pushvalue(L, -1);
+	lua_setfield(L, -2, "__index");
+	luaL_register(L, NULL, server_m);
+
 	luaL_register(L, LUA_MOD_NAME, core);
 	return 1;
 }
