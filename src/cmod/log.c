@@ -34,6 +34,8 @@
 #include <sancus_common.h>
 #include <sancus_log.h>
 
+#define LUA_MOD_NAME	"sancus.log.core"
+
 /*
  */
 static int l_write(lua_State *L)
@@ -55,6 +57,6 @@ static const struct luaL_Reg core[] = {
 
 int luaopen_sancus_log_core(lua_State *L)
 {
-	luaL_register(L, "sancus.log.core", core);
+	luaL_register(L, LUA_MOD_NAME, core);
 	return 1;
 }
