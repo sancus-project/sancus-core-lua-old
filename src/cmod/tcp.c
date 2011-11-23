@@ -27,15 +27,35 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <stdbool.h>
+
 #define LUA_LIB
 #include "lua.h"
 #include "lauxlib.h"
 
 #define LUA_MOD_NAME	"sancus.tcp.core"
 
+#include <ev.h>
+
+#include <sancus_list.h>
+#include <sancus_server.h>
+
+/*
+ */
+static int l_create_server(lua_State *L)
+{
+	struct sancus_tcp_server *server;
+
+	server = lua_newuserdata(L, sizeof(*server));
+	sancus_tcp_server_init(server);
+
+	return 1;
+}
+
 /*
  */
 static const struct luaL_Reg core[] = {
+	{"create_server", l_create_server},
 	{NULL, NULL} /* sentinel */
 };
 
