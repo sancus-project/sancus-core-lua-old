@@ -41,6 +41,12 @@
 #include <sancus_list.h>
 #include <sancus_server.h>
 
+#include <sancus_common.h>
+#include <sancus_log.h>
+
+#define LOG_PREFIX	LUA_MOD_NAME
+
+#define checkserver(L)	luaL_checkudata(L, 1, MT_SERVER)
 /*
  */
 static int l_create_server(lua_State *L)
@@ -53,7 +59,19 @@ static int l_create_server(lua_State *L)
 	luaL_getmetatable(L, MT_SERVER);
 	lua_setmetatable(L, -2);
 
+	debugf("server=%p", (void*)server);
 	return 1;
+}
+
+static int l_destroy_server(lua_State *L)
+{
+	struct sancus_tcp_server *server = checkserver(L);
+
+	if (server) {
+		debugf("server=%p", (void*)server);
+	}
+
+	return 0;
 }
 
 /*
@@ -64,6 +82,7 @@ static const struct luaL_Reg core[] = {
 };
 
 static const struct luaL_Reg server_m[] = {
+	{"__gc", l_destroy_server},
 	{NULL, NULL} /* sentinel */
 };
 
