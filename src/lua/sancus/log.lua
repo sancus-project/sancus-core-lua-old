@@ -18,7 +18,9 @@ function _mt:log(str, ...)
 	core.write(9, self.name, str)
 end
 
-_mt.__call = _mt.log
+function _mt:__call(...)
+	return _mt.log(self, ...)
+end
 _mt.__index = _mt
 
 function logger(name)
