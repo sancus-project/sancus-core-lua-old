@@ -10,16 +10,16 @@ local assert, select, type = assert, select, type
 
 module(...)
 
-local _mt = {
-	__index = {},
-}
-
-function _mt.__index:log(str, ...)
+local _mt = {}
+function _mt:log(str, ...)
 	if select('#', ...) > 0 then
 		str = str:format(...)
 	end
 	core.write(9, self.name, str)
 end
+
+_mt.__call = _mt.log
+_mt.__index = _mt
 
 function logger(name)
 	assert(name == nil or type(name) == 'string')
