@@ -127,6 +127,51 @@ static int l_listen_ipv4(lua_State *L)
 	return 0;
 }
 
+/** server:listen_ipv6(address, port) */
+static int l_listen_ipv6(lua_State *L)
+{
+	struct sancus_tcp_server *server = checkserver(L);
+	struct sancus_tcp_port *port;
+
+	bool cloexec = true;
+	unsigned backlog = 32;
+
+	const char *addr = NULL;
+	int p;
+
+	int ret;
+
+	/* ipv6 addr */
+	if (lua_type(L, 2) != LUA_TNIL)
+		addr = luaL_checkstring(L, 2);
+
+	/* ipv6 port */
+	p = luaL_checkinteger(L, 3);
+	luaL_argcheck(L, p > 0 && p <= 65535, 3, "invalid port");
+
+	/* close on exec? */
+	/* listen backlog? */
+
+	port = lua_newuserdata(L, sizeof(*port));
+	ret = sancus_tcp_ipv6_port(port, server,
+				   addr, p,
+				   cloexec, backlog);
+	if (ret > 0) {
+		luaL_getmetatable(L, MT_PORT);
+		lua_setmetatable(L, -2);
+
+		debugf("port=%p server=%p listening [%s]:%d",
+		       (void*)port, (void*)server,
+		       addr ? addr : "::", p);
+		return 1;
+	} else if (ret == 0) {
+		luaL_error(L, "[%s]: invalid IPv6 address", addr);
+	} else {
+		luaL_error(L, strerror(errno));
+	}
+	return 0;
+}
+
 /** server:listen_local(path) */
 static int l_listen_local(lua_State *L)
 {
@@ -183,6 +228,7 @@ static const struct luaL_Reg core[] = {
 static const struct luaL_Reg server_m[] = {
 	{"__gc", l_destroy_server},
 	{"listen_ipv4", l_listen_ipv4},
+	{"listen_ipv6", l_listen_ipv6},
 	{"listen_local", l_listen_local},
 	{NULL, NULL} /* sentinel */
 };
