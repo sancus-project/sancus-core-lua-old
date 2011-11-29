@@ -106,19 +106,12 @@ static int l_listen_ipv4(lua_State *L)
 
 	/* close on exec? */
 	/* listen backlog? */
-	/* custom sockopt? */
 
 	port = lua_newuserdata(L, sizeof(*port));
 	ret = sancus_tcp_ipv4_port(port, server,
 				   addr, p,
-				   cloexec);
-	if (ret < 0) {
-		goto syserr;
-	} else if (ret == 0) {
-		luaL_error(L, "%s: invalid IPv4 address", addr);
-	}
-
-	if (sancus_tcp_port_listen(port, backlog) == 0) {
+				   cloexec, backlog);
+	if (ret > 0) {
 		luaL_getmetatable(L, MT_PORT);
 		lua_setmetatable(L, -2);
 
@@ -126,11 +119,11 @@ static int l_listen_ipv4(lua_State *L)
 		       (void*)port, (void*)server,
 		       addr ? addr : "0", p);
 		return 1;
+	} else if (ret == 0) {
+		luaL_error(L, "%s: invalid IPv4 address", addr);
+	} else {
+		luaL_error(L, strerror(errno));
 	}
-
-	sancus_tcp_port_close(port);
-syserr:
-	luaL_error(L, strerror(errno));
 	return 0;
 }
 
