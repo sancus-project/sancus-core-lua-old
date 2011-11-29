@@ -127,6 +127,42 @@ static int l_listen_ipv4(lua_State *L)
 	return 0;
 }
 
+/** server:listen_local(path) */
+static int l_listen_local(lua_State *L)
+{
+	struct sancus_tcp_server *server = checkserver(L);
+	struct sancus_tcp_port *port;
+
+	bool cloexec = true;
+	unsigned backlog = 32;
+	int ret;
+
+	/* path addr */
+	const char *path = luaL_checkstring(L, 2);
+
+	/* close on exec? */
+	/* listen backlog? */
+
+	port = lua_newuserdata(L, sizeof(*port));
+	ret = sancus_tcp_local_port(port, server,
+				   path,
+				   cloexec, backlog);
+	if (ret > 0) {
+		luaL_getmetatable(L, MT_PORT);
+		lua_setmetatable(L, -2);
+
+		debugf("port=%p server=%p listening %s",
+		       (void*)port, (void*)server,
+		       path);
+		return 1;
+	} else if (ret == 0) {
+		luaL_error(L, "%s: invalid path", path);
+	} else {
+		luaL_error(L, strerror(errno));
+	}
+	return 0;
+}
+
 static int l_destroy_port(lua_State *L)
 {
 	struct sancus_tcp_port *port = checkport(L);
@@ -147,6 +183,7 @@ static const struct luaL_Reg core[] = {
 static const struct luaL_Reg server_m[] = {
 	{"__gc", l_destroy_server},
 	{"listen_ipv4", l_listen_ipv4},
+	{"listen_local", l_listen_local},
 	{NULL, NULL} /* sentinel */
 };
 
