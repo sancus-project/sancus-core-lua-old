@@ -90,7 +90,6 @@ static int l_listen_ipv4(lua_State *L)
 
 	bool cloexec = true;
 	unsigned backlog = 32;
-	void (*sockopts) (int) = NULL;
 
 	const char *addr = NULL;
 	int p;
@@ -112,7 +111,7 @@ static int l_listen_ipv4(lua_State *L)
 	port = lua_newuserdata(L, sizeof(*port));
 	ret = sancus_tcp_ipv4_port(port, server,
 				   addr, p,
-				   cloexec, sockopts);
+				   cloexec);
 	if (ret < 0) {
 		goto syserr;
 	} else if (ret == 0) {
