@@ -67,7 +67,9 @@ static int l_create_server(lua_State *L)
 	luaL_getmetatable(L, MT_SERVER);
 	lua_setmetatable(L, -2);
 
-	debugf("server=%p", (void*)server);
+	sancus_tcp_server_start(server, ev_default_loop(0));
+
+	debugf("server=%p started", (void*)server);
 	return 1;
 }
 
@@ -76,7 +78,8 @@ static int l_destroy_server(lua_State *L)
 	struct sancus_tcp_server *server = checkserver(L);
 
 	if (server) {
-		debugf("server=%p", (void*)server);
+		sancus_tcp_server_close(server);
+		debugf("server=%p closed", (void*)server);
 	}
 
 	return 0;
